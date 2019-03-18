@@ -8,7 +8,7 @@
 %...... mu_1 ; mu_2 ; tau_1 ; tau_2 ; volume ; conversion ; kt ; kp ; k_td] 
 
 %%
-function [ts,Xms,y0s]= PMMA_DataGeneration(seed)
+function [ts,Xms,y]= PMMA_DataGeneration()
     global E_d E_p E_td k_d0 k0_tm k0_td0 k0_p0 T R_gas A_1 A_2 A_3 A_4 B_1 B_2 B_3 B_4 MW_m R_li R_lm R_vm f k_d k_tc k0_td k_tm kp_0 kt_0 rho_m rho_p Ts     
     %%%%%Parameters for the MMA Dae system
     
@@ -44,9 +44,9 @@ function [ts,Xms,y0s]= PMMA_DataGeneration(seed)
     M_0= 1E6;                  %Initial moles of monomer
     
     M=diag([1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0]);  %% Mass Matrix form
-    y0=zeros(1,16);
+    y0=zeros(16,1);
     
-    rng(seed,'twister');
+    rng(3,'twister');
     Tempratures = normrnd(313.15,5,1,1000);     %Random values of Temprature with 
     R_lms= normrnd(1000,1000,1,1000);               %Random values of flow rate of monomer
     ts=[];
@@ -57,8 +57,9 @@ function [ts,Xms,y0s]= PMMA_DataGeneration(seed)
     y0s=[];
     for i=1:50
         T=Tempratures(i);
+        y0s=horzcat(y0s,y0);
         R_lm =R_lms(i);
-        y0s=vertcat(y0s,y0);
+        
         if(R_lm<0)
             R_lm=0;
         end
@@ -121,7 +122,7 @@ function [ts,Xms,y0s]= PMMA_DataGeneration(seed)
         Tis=vertcat(Tis,Tf);
         Rlms= vertcat(Rlms,R_lm);
         Rlms= vertcat(Rlms,R_lm);
-        [m,~] = size(y);
+        [m,n] = size(y);
         y0=y(m,:);
     end
     
