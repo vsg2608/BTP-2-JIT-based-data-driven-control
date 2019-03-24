@@ -1,11 +1,20 @@
+%{
+%Data Generation
 clear;
 [Data]= generate_data(5);
 save ("./data/batch_raw_data.mat");
+%Data normalization
 clear;
 [Data]= normalize();
 save ("./data/batch_norm_data.mat");
+%}
+clear;
+load ("./data/batch_norm_data.mat");
 
-
+qProfile= Data(11:20,:,5);
+tProfile= Data(:,:,1);
+[rProfile,totalCost]=TWED(qProfile,tProfile);
+rProfile
 %function to generatedata for bs batches
 function [Data]= generate_data(bs)
     for i= 1:bs
@@ -25,3 +34,4 @@ function [norm_data]= normalize()
         norm_data(:,i,:) = (Data(:,i,:) - minVal) / ( maxVal - minVal );
     end 
 end
+

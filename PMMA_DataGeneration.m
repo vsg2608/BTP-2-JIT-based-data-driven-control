@@ -55,7 +55,7 @@ function [ts,Xms,y0s]= PMMA_DataGeneration(seed)
     Rlms=[];
     Tis=[];
     y0s=[];
-    for i=1:50
+    for i=1:100
         T=Tempratures(i);
         R_lm =R_lms(i);
         y0s=vertcat(y0s,y0);
@@ -63,7 +63,7 @@ function [ts,Xms,y0s]= PMMA_DataGeneration(seed)
             R_lm=0;
         end
         
-        InitialTime=10;
+        InitialTime=5;
         
         if(i==1)
             Ti=0;
