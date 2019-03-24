@@ -1,5 +1,5 @@
 clear;
-load rawData;
+load "data/";
 qProfile= [3 2 2 4 1 2 4];
 tProfile= [0 0 3 2 20 4 1 2 4 4];
 global qSize tSize;
@@ -96,7 +96,6 @@ function [totalCost,rProfile,A]= TWED(qProfile, tProfile)
             i=i-1;
         end
     end
-    rProfile;
 end
 
 %Moving window method
