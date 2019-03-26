@@ -11,10 +11,34 @@ save ("./data/batch_norm_data.mat");
 clear;
 load ("./data/batch_norm_data.mat");
 
-qProfile= Data(11:20,:,5);
-tProfile= Data(:,:,1);
-[rProfile,totalCost]=TWED(qProfile,tProfile);
-rProfile
+qBatch= 5;
+qTime= 21;
+qPoint= Data(qTime,:,qBatch);
+size_Profile=20
+i_qTime=qTime-size_Profile+1;
+qProfile= Data(i_qTime:qTime,:,qBatch);
+X=[]
+U=[]
+W=[]
+Y=[]
+for b=1:qBatch-1
+    tProfile= Data(:,:,b);
+    [rProfile,totalCost,iTime]= TWED(qProfile,tProfile);
+    for i= 1:size_Profile
+        X=vertcat(X, rProfile(i,:));
+        U=vertcat(U, rProfile(i,11));
+        Y=vertcat(Y, rProfile(i,13));
+    end
+end
+
+
+
+
+
+
+
+
+
 %function to generatedata for bs batches
 function [Data]= generate_data(bs)
     for i= 1:bs

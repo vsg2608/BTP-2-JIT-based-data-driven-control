@@ -1,5 +1,5 @@
 
-function [rProfile,totalCost]=TWED(qProfile,tProfile)
+function [rProfile,totalCost,iTime]=TWED(qProfile,tProfile)
     [qSize,xs]= size(qProfile);
     [tSize,xs]= size(tProfile);
     A = zeros(tSize,qSize);
@@ -53,4 +53,5 @@ function [rProfile,totalCost]=TWED(qProfile,tProfile)
     end
     totalCost=minCost;
     rProfile=minProfile(i-qSize+1:i,:);
+    iTime=i-qSize+1;
 end

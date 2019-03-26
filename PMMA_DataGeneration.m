@@ -58,7 +58,9 @@ function [ts,Xms,y0s]= PMMA_DataGeneration(seed)
     for i=1:100
         T=Tempratures(i);
         R_lm =R_lms(i);
-        y0s=vertcat(y0s,y0);
+        Y0=y0;
+        Y0(11)=T; % replacaed 11th parameter to temprature as 10th and 11th were exactly same for all times.
+        y0s=vertcat(y0s,Y0);
         if(R_lm<0)
             R_lm=0;
         end
