@@ -10,14 +10,14 @@ i_qTime=qTime-size_Profile+1;   %Initial query profile time
 qProfile= Data(i_qTime:qTime,:,qBatch); %Query Profile
 
 W=[];
-U= qProfile(1:size_Profile,[1,2]);  %Inputs
-Y= qProfile(1:size_Profile,3);      %Outputs
+U= Data(i_qTime:qTime,[1,2],qBatch);    %Inputs
+Y= Data(i_qTime:qTime,3,qBatch);        %Outputs
 
 data = iddata(Y,U,Ts);              %iddata object
 [sys,x0] = ssest(data,3);           %State Space Model
 
 prediction_time= 5;                 %Time after qPoint to be predicted
-t = 0:5:145+Ts*prediction_time;
+t = 0:Ts:Ts*(size_Profile-1)+Ts*prediction_time;
 uq= Data(i_qTime:qTime+prediction_time,[1,2],qBatch);
 yq= Data(i_qTime:qTime+prediction_time,3,qBatch);
 [y,x] = lsim(sys,uq',t,x0);

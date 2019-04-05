@@ -9,15 +9,43 @@ i_qTime=qTime-size_Profile+1;   %Initial query profile time
 qProfile= Data(i_qTime:qTime,:,qBatch); %Query Profile
 
 cProfile= qProfile;             %Combined Profile
-W=[]
-sProfiles=[]
-for b=1:4
+wProfiles=[];
+sProfiles=[];
+for b=1:qBatch-1
     tProfile= Data(:,:,b);
     [rProfile,totalCost,iTime]= TWED(qProfile,tProfile);
-    sProfiles[:,:,b]= 
-    
+    sProfiles(:,:,b)= rProfile;
+    W=[];
+    for i=1:size_Profile
+        dt= abs(iTime-qTime);
+        db= abs(b-qBatch);
+        ds= sqrt(sum((qProfile(i,:) - rProfile(i,:)) .^ 2));
+        
+        W(i,:)=[exp(-ds*ds),exp(-0.0001*dt*dt),exp(-db*db)];
+    end
+    wProfiles(:,:,b)= W;
 end
 
+for i=1:3
+    wProfiles(:,i,:)= wProfiles(:,i,:)/sum(sum(wProfiles(:,i,:)));
+end
+
+cProfile= qProfile;             %Combined Profile
+for i=1:size_Profile
+    temp=0;
+    temp2=0;
+    for b=1:qBatch-1
+        w=wProfiles(i,1,b);
+        temp=temp+sProfiles(i,:,b)*w;
+        temp2=temp2+w;
+    end
+    cProfile(i,:)=temp/temp2;
+end
+U= cProfile(1:size_Profile,[1,2]);  %Inputs
+Y= cProfile(1:size_Profile,3);      %Outputs
+
+plot(cProfile(:,3),qProfile(:,3));
+%{
 data = iddata(Y,U,5);
 [sys,x0] = ssest(data,3);
 
@@ -28,3 +56,4 @@ yq= Data(i_qTime:qTime+5,3,qBatch);
 plot(t,y);
 hold on;
 plot(t,yq);
+%}

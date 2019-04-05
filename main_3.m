@@ -7,7 +7,6 @@ qTime= 31;                      %Query Time
 size_Profile=30;                %Query Profile size
 i_qTime=qTime-size_Profile+1;   %Initial query profile time
 qProfile= Data(i_qTime:qTime,:,qBatch); %Query Profile
-Ts= 5;
 
 cProfile= qProfile;             %Combined Profile
 wProfiles=[];
@@ -41,20 +40,18 @@ for i=1:size_Profile
         temp=temp+sProfiles(i,:,b)*w;
         temp2=temp2+w;
     end
-    %Addition of query profile point in combined profile
-    temp=temp+qProfile(i,:); 
-    temp2= temp2+1;
+    
     cProfile(i,:)=temp/temp2;
 end
 U= cProfile(1:size_Profile,[1,2]);  %Inputs
 Y= cProfile(1:size_Profile,3);      %Outputs
 
 
+
 data = iddata(Y,U,5);
 plot(data)
-[sys,x0] = ssest(data,1);
+[sys,x0] = ssest(data,3);
 
-prediction_time= 5;                 %Time after qPoint to be predicted
 t = 0:Ts:Ts*(size_Profile-1)+Ts*prediction_time;
 uq= Data(i_qTime:qTime+5,[1,2],qBatch);
 yq= Data(i_qTime:qTime+5,3,qBatch);
