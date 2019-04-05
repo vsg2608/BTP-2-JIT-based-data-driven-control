@@ -42,8 +42,8 @@ for i=1:size_Profile
         temp2=temp2+w;
     end
     %Addition of query profile point in combined profile
-    temp=temp+qProfile(i,:); 
-    temp2= temp2+1;
+    %temp=temp+qProfile(i,:); 
+    %temp2= temp2+1;
     cProfile(i,:)=temp/temp2;
 end
 U= cProfile(1:size_Profile,[1,2]);  %Inputs

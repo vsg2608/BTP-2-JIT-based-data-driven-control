@@ -14,7 +14,7 @@ U= Data(i_qTime:qTime,[1,2],qBatch);    %Inputs
 Y= Data(i_qTime:qTime,3,qBatch);        %Outputs
 
 data = iddata(Y,U,Ts);              %iddata object
-[sys,x0] = ssest(data,3);           %State Space Model
+[sys,x0] = ssest(data,1);           %State Space Model
 
 prediction_time= 5;                 %Time after qPoint to be predicted
 t = 0:Ts:Ts*(size_Profile-1)+Ts*prediction_time;
