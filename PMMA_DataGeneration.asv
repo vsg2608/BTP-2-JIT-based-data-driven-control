@@ -55,7 +55,7 @@ function [ts,Xms,y0s]= PMMA_DataGeneration(seed)
     Rlms=[];
     Tis=[];
     y0s=[];
-    for i=1:200
+    for i=1:100
         T=Tempratures(i);
         R_lm =R_lms(i);
         Y0=y0;
@@ -64,9 +64,9 @@ function [ts,Xms,y0s]= PMMA_DataGeneration(seed)
             R_lm=0;
         end
         Y0(11)=T; % replacaed 11th parameter to temprature as 10th and 11th were exactly same for all times.
-        Y0(10)=R_lm; % replacaed 10th parameter to Rlms
+        %Y0(10)=R_lm; % replacaed 10th parameter to Rlms
         
-        InitialTime=2;
+        InitialTime=;
         
         if(i==1)
             Ti=0;
