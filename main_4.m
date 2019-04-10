@@ -8,12 +8,14 @@ qBatch= 5;                      %Query Batch
 qTime= 101;                      %Query Time
 size_Profile=30;                %Query Profile size
 forward_Profile=10;
-
-for itr=1:16
+Ts= 1;                          %Delta Time
+prediction_time= 10;                 %Time after qPoint to be predicted
+    
+for itr=1:14
     qTime=35+5*itr;
     i_qTime=qTime-size_Profile+1;   %Initial query profile time
     qProfile= Data(i_qTime:qTime,:,qBatch); %Query Profile
-    Ts= 2;                          %Delta Time
+    
 
     cProfile= qProfile;             %Combined Profile
     wProfiles=[];
@@ -64,7 +66,6 @@ for itr=1:16
     
     [sys,x0] = ssest(data,1);
 
-    prediction_time= 20;                 %Time after qPoint to be predicted
     t = 0:Ts:Ts*(size_Profile-1)+Ts*prediction_time;
     uq= Data(i_qTime:qTime+prediction_time,[1,2],qBatch);
     yq= Data(i_qTime:qTime+prediction_time,3,qBatch);

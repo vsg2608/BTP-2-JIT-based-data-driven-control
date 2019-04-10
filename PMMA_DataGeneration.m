@@ -55,8 +55,12 @@ function [ts,Xms,y0s]= PMMA_DataGeneration(seed)
     Rlms=[];
     Tis=[];
     y0s=[];
-    for i=1:200
+    for i=1:300
         T=Tempratures(i);
+        if(i>50)    %Step input
+            T=T+10;
+        end
+       
         R_lm =R_lms(i);
         Y0=y0;
         
@@ -66,7 +70,7 @@ function [ts,Xms,y0s]= PMMA_DataGeneration(seed)
         Y0(11)=T; % replacaed 11th parameter to temprature as 10th and 11th were exactly same for all times.
         Y0(10)=R_lm; % replacaed 10th parameter to Rlms
         
-        InitialTime=2;
+        InitialTime=1;
         
         if(i==1)
             Ti=0;
@@ -126,7 +130,9 @@ function [ts,Xms,y0s]= PMMA_DataGeneration(seed)
         Rlms= vertcat(Rlms,R_lm);
         [m,~] = size(y);
         y0=y(m,:);
-        YO(13)=y0(13);
+        Y0(13)=y0(13);
+        Y0(12)= MW_m*(y0(6)+y0(9))/(y0(5)+y0(8));
+        
         y0s=vertcat(y0s,Y0);
     end
     
@@ -134,7 +140,9 @@ function [ts,Xms,y0s]= PMMA_DataGeneration(seed)
     plot(ts,Xms), xlabel('Time(min)'), ylabel('Conversion, Xm'), title('Batch ');
     subplot(2,1,2);
     plot(Tis,Temps),xlabel('Time(min)'), ylabel('Temprature');
-
+    s='graphs-BTP2/run0.png';
+    s(16)=int2str(seed);
+    saveas(gcf,s);
 
 
     %% function handle for Dae simulation in Ode15s %

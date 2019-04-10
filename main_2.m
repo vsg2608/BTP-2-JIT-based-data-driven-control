@@ -7,13 +7,13 @@ Y_actuals=[];
 qBatch= 5;                      %Query Batch
 qTime= 101;                      %Query Time
 size_Profile=30;                %Query Profile size
+Ts= 1;                          %Delta Time
 
-for itr=1:30
+for itr=1:14
     qTime=35+5*itr;
     i_qTime=qTime-size_Profile+1;   %Initial query profile time
     qProfile= Data(i_qTime:qTime,:,qBatch); %Query Profile
-    Ts= 2;                          %Delta Time
-
+    
     cProfile= qProfile;             %Combined Profile
     wProfiles=[];
     sProfiles=[];

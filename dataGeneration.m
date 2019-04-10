@@ -13,7 +13,7 @@ function [Data]= generate_data(bs)
     for i= 1:bs
         [~,~,Data(:,:,i)]= PMMA_DataGeneration(i);
     end
-    Data= Data(:,[10,11,13],:); % Only 10th(Rlm), 11th(Temp) and 13th(conversion) required.
+    Data= Data(:,[10,11,13,],:); % Only 10th(Rlm), 11th(Temp) and 13th(conversion) required.
 end
 
 % function to normalize raw data

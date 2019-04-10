@@ -7,11 +7,12 @@ qTime= 101;                      %Query Time
 size_Profile=30;                %Query Profile sizeT_predicts=[];
 Y_predicts=[];
 Y_actuals=[];
-for itr=1:30
+Ts= 1;
+for itr=1:14
     qTime=35+5*itr;
     i_qTime=qTime-size_Profile+1;   %Initial query profile time
     qProfile= Data(i_qTime:qTime,:,qBatch); %Query Profile
-    Ts= 2;
+    
 
     cProfile= qProfile;             %Combined Profile
     wProfiles=[];
@@ -47,7 +48,7 @@ for itr=1:30
             temp2=temp2+w;
         end
         %Addition of query profile point in combined profile
-        qWeight= 0.1;           %Weight corresponding to query point
+        qWeight= 1;           %Weight corresponding to query point
         temp=temp+qWeight*qProfile(i,:); 
         temp2= temp2+qWeight;
         cProfile(i,:)=temp/temp2;
