@@ -25,15 +25,16 @@ for itr=1:30
             dt= abs(iTime-i_qTime);
             db= abs(b-qBatch);
             ds= sqrt(sum((qProfile(i,:) - rProfile(i,:)) .^ 2));
-
-            W(i,:)=[exp(-ds*ds),exp(-0.01*dt*dt),exp(-0.1*db*db)];
+            
+            temp= 1*ds*ds + 0.01*dt*dt + 0.1*db*db;
+            W(i)=exp(-temp);
         end
-        wProfiles(:,:,b)= W;
+        wProfiles(:,b)= W;
     end
 
     %Softmax Implementation
-    for i=1:3
-        wProfiles(:,i,:)= wProfiles(:,i,:)/sum(sum(wProfiles(:,i,:)));
+    for i=1:size_Profile
+        wProfiles(i,:)= wProfiles(i,:)/sum(wProfiles(i,:));
     end
 
     cProfile= qProfile;             %Combined Profile
@@ -41,12 +42,12 @@ for itr=1:30
         temp=0;
         temp2=0;
         for b=1:qBatch-1
-            w=wProfiles(i,1,b)*wProfiles(i,2,b)*wProfiles(i,3,b);
+            w=wProfiles(i,b);
             temp=temp+sProfiles(i,:,b)*w;
             temp2=temp2+w;
         end
         %Addition of query profile point in combined profile
-        qWeight= 0.0001;           %Weight corresponding to query point
+        qWeight= 0.1;           %Weight corresponding to query point
         temp=temp+qWeight*qProfile(i,:); 
         temp2= temp2+qWeight;
         cProfile(i,:)=temp/temp2;
@@ -55,7 +56,7 @@ for itr=1:30
     Y= cProfile(1:size_Profile,3);      %Outputs
 
     data = iddata(Y,U,Ts);
-    [sys,x0] = ssest(data,2);
+    [sys,x0] = ssest(data,1);
 
     prediction_time= 10;                 %Time after qPoint to be predicted
     t = 0:Ts:Ts*(size_Profile-1)+Ts*prediction_time;

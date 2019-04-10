@@ -4,7 +4,7 @@ load ("./data/batch_norm_data.mat");
 
 Ts=2;
 qBatch= 5;                      %Query Batch
-qTime= 101;                      %Query Time
+qTime= 101;                     %Query Time
 size_Profile=30;                %Query Profile size
 T_predicts=[];
 Y_predicts=[];
@@ -34,7 +34,9 @@ for itr=1:30
     hold on;
     plot(t,yq);
 end
+
 hold off;
 scatter(T_predicts,Y_predicts);
 hold on;
 scatter(T_predicts,Y_actuals);
+err = immse(Y_actuals,Y_predicts)

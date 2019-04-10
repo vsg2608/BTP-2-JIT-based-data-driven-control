@@ -55,10 +55,10 @@ for itr=1:30
     
     [sys,x0] = ssest(data,1);
 
-    prediction_time= 5;                 %Time after qPoint to be predicted
+    prediction_time= 10;                 %Time after qPoint to be predicted
     t = 0:Ts:Ts*(size_Profile-1)+Ts*prediction_time;
-    uq= Data(i_qTime:qTime+5,[1,2],qBatch);
-    yq= Data(i_qTime:qTime+5,3,qBatch);
+    uq= Data(i_qTime:qTime+prediction_time,[1,2],qBatch);
+    yq= Data(i_qTime:qTime+prediction_time,3,qBatch);
     [y,x] = lsim(sys,uq',t,x0);
     lastPoint= size_Profile +prediction_time;
     T_predicts(itr)= qTime+prediction_time;
@@ -72,3 +72,4 @@ hold off;
 scatter(T_predicts,Y_predicts);
 hold on;
 scatter(T_predicts,Y_actuals);
+err = immse(Y_actuals,Y_predicts)

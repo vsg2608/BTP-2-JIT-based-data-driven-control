@@ -9,7 +9,7 @@ qTime= 101;                      %Query Time
 size_Profile=30;                %Query Profile size
 forward_Profile=10;
 
-for itr=1:15
+for itr=1:16
     qTime=35+5*itr;
     i_qTime=qTime-size_Profile+1;   %Initial query profile time
     qProfile= Data(i_qTime:qTime,:,qBatch); %Query Profile
@@ -29,14 +29,14 @@ for itr=1:15
             db= abs(b-qBatch);
             ds= sqrt(sum((qProfile(i,:) - rProfile(i,:)) .^ 2));
 
-            W(i,:)=[exp(-ds*ds),exp(-0.01*dt*dt),exp(-0.1*db*db)];
+            W(i,:)=[exp(-ds*ds),exp(-0.001*dt*dt),exp(-0.1*db*db)];
         end
         for i=size_Profile+1:size_Profile+forward_Profile
             dt= abs(iTime-i_qTime);
             db= abs(b-qBatch);
             ds=0;
             
-            W(i,:)=[exp(-ds*ds),exp(-0.01*dt*dt),exp(-0.1*db*db)];
+            W(i,:)=[exp(-ds*ds),exp(-0.001*dt*dt),exp(-0.1*db*db)];
         end
         wProfiles(:,:,b)= W;
     end
@@ -57,17 +57,17 @@ for itr=1:15
         end
         cProfile(i,:)=temp/temp2;
     end
-    U= cProfile(1:size_Profile+forward_Profile,[1,2]);  %Inputs
-    Y= cProfile(1:size_Profile+forward_Profile,3);      %Outputs
+    U= cProfile(:,[1,2]);  %Inputs
+    Y= cProfile(:,3);      %Outputs
 
     data = iddata(Y,U,Ts);
     
     [sys,x0] = ssest(data,1);
 
-    prediction_time= 5;                 %Time after qPoint to be predicted
+    prediction_time= 20;                 %Time after qPoint to be predicted
     t = 0:Ts:Ts*(size_Profile-1)+Ts*prediction_time;
-    uq= Data(i_qTime:qTime+5,[1,2],qBatch);
-    yq= Data(i_qTime:qTime+5,3,qBatch);
+    uq= Data(i_qTime:qTime+prediction_time,[1,2],qBatch);
+    yq= Data(i_qTime:qTime+prediction_time,3,qBatch);
     [y,x] = lsim(sys,uq',t,x0);
     lastPoint= size_Profile +prediction_time;
     T_predicts(itr)= qTime+prediction_time;
@@ -81,3 +81,5 @@ hold off;
 scatter(T_predicts,Y_predicts);
 hold on;
 scatter(T_predicts,Y_actuals);
+
+err = immse(Y_actuals,Y_predicts)

@@ -1,13 +1,15 @@
 %Similarity measurement and system identification
 clear;
 load ("./data/batch_norm_data.mat");
-T_predicts=[]
-Y_predicts=[]
+
 Ts=2;
 qBatch= 5;                      %Query Batch
 qTime= 101;                      %Query Time
 size_Profile=30;                %Query Profile size
-for itr=1:30
+T_predicts=[];
+Y_predicts=[];
+Y_actuals=[];
+for itr=1:1
     qTime=35+5*itr;
     i_qTime=qTime-size_Profile+1;   %Initial query profile time
     qProfile= Data(i_qTime:qTime,:,qBatch); %Query Profile
@@ -17,7 +19,7 @@ for itr=1:30
     Y= Data(i_qTime:qTime,3,qBatch);        %Outputs
 
     data = iddata(Y,U,Ts);              %iddata object
-    [sys,x0] = ssest(data,3);           %State Space Model
+    [sys,x0] = ssest(data,2);           %State Space Model
 
     prediction_time= 10;                 %Time after qPoint to be predicted
     t = 0:Ts:Ts*(size_Profile-1)+Ts*prediction_time;
@@ -25,9 +27,16 @@ for itr=1:30
     yq= Data(i_qTime:qTime+prediction_time,3,qBatch);
     [y,x] = lsim(sys,uq',t,x0);
     lastPoint= size_Profile +prediction_time;
-    T_predicts(itr)=T(lastPoint);
-    Y_predicts(itr)=Y()
+    T_predicts(itr)= qTime+prediction_time;
+    Y_predicts(itr)= y(lastPoint);
+    Y_actuals(itr)= yq(lastPoint);
     plot(t,y);
     hold on;
     plot(t,yq);
 end
+
+hold off;
+scatter(T_predicts,Y_predicts);
+hold on;
+scatter(T_predicts,Y_actuals);
+err = immse(Y_actuals,Y_predicts)

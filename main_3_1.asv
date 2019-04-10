@@ -25,15 +25,16 @@ for itr=1:30
             dt= abs(iTime-i_qTime);
             db= abs(b-qBatch);
             ds= sqrt(sum((qProfile(i,:) - rProfile(i,:)) .^ 2));
-
-            W(i,:)=[exp(-ds*ds),exp(-0.01*dt*dt),exp(-0.1*db*db)];
+            
+            temp= 1*ds*ds + 0.01*dt*dt + 0.1*db*db;
+            W(i)=exp(-temp);
         end
-        wProfiles(:,:,b)= W;
+        wProfiles(:,b)= W;
     end
 
     %Softmax Implementation
-    for i=1:3
-        wProfiles(:,i,:)= wProfiles(:,i,:)/sum(sum(wProfiles(:,i,:)));
+    for i=1:sizeProfile
+        wProfiles(i,:)= wProfiles(:,i,:)/sum(sum(wProfiles(:,i,:)));
     end
 
     cProfile= qProfile;             %Combined Profile
