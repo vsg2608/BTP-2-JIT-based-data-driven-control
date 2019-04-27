@@ -1,15 +1,16 @@
-%Similarity measurement and system identification
+ %Similarity measurement and system identification
+ %Moving Window Method here
 clear;
 load ("./data/batch_norm_data.mat");
 
-Ts=2;
+Ts=1;                           %Step time
 qBatch= 5;                      %Query Batch
-qTime= 101;                      %Query Time
+qTime= 101;                     %Query Time
 size_Profile=30;                %Query Profile size
 T_predicts=[];
 Y_predicts=[];
 Y_actuals=[];
-for itr=1:1
+for itr=1:30
     qTime=35+5*itr;
     i_qTime=qTime-size_Profile+1;   %Initial query profile time
     qProfile= Data(i_qTime:qTime,:,qBatch); %Query Profile
@@ -19,7 +20,7 @@ for itr=1:1
     Y= Data(i_qTime:qTime,3,qBatch);        %Outputs
 
     data = iddata(Y,U,Ts);              %iddata object
-    [sys,x0] = ssest(data,2);           %State Space Model
+    [sys,x0] = ssest(data,1);           %State Space Model
 
     prediction_time= 10;                 %Time after qPoint to be predicted
     t = 0:Ts:Ts*(size_Profile-1)+Ts*prediction_time;

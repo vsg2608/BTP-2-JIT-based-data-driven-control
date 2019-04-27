@@ -3,17 +3,19 @@ clear;
 [Data]= generate_data(5);
 save ("./data/batch_raw_data.mat");
 %Data normalization
-clear;
+%clear;
 [Data]= normalize();
 save ("./data/batch_norm_data.mat");
-
-
+for i=1:6
+    subplot(3,2,i);
+    plot(Data(:,i,1));
+end
 %function to generatedata for bs batches
 function [Data]= generate_data(bs)
     for i= 1:bs
-        [~,~,Data(:,:,i)]= PMMA_DataGeneration(i);
+        [~,~,Data(:,:,i)]= PMMA_DataGeneration(i+1);
     end
-    Data= Data(:,[10,11,13,],:); % Only 10th(Rlm), 11th(Temp) and 13th(conversion) required.
+    Data= Data(:,[10,11,12,13,14,15],:); % Only 10th(Rlm), 11th(Temp) and 13th(conversion) required.
 end
 
 % function to normalize raw data

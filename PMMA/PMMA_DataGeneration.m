@@ -47,8 +47,8 @@ function [ts,Xms,y0s]= PMMA_DataGeneration(seed)
     y0=zeros(1,16);
     
     rng(seed,'twister');
-    Tempratures = normrnd(313.15,5,1,1000);     %Random values of Temprature with 
-    R_lms= normrnd(1000,1000,1,1000);               %Random values of flow rate of monomer
+    Tempratures = normrnd(313.15,2,1,1000);     %Random values of Temprature with 
+    R_lms= normrnd(1000,200,1,1000);               %Random values of flow rate of monomer
     ts=[];
     Xms=[];
     Temps=[];
@@ -57,10 +57,14 @@ function [ts,Xms,y0s]= PMMA_DataGeneration(seed)
     y0s=[];
     for i=1:300
         T=Tempratures(i);
+        %T=30+273.15;
         if(i>50)    %Step input
             T=T+10;
         end
-       
+        if(i>120)
+            T=T-20;
+        end
+        
         R_lm =R_lms(i);
         Y0=y0;
         
@@ -132,7 +136,8 @@ function [ts,Xms,y0s]= PMMA_DataGeneration(seed)
         y0=y(m,:);
         Y0(13)=y0(13);
         Y0(12)= MW_m*(y0(6)+y0(9))/(y0(5)+y0(8));
-        
+        Y0(14)= MW_m*(y0(5)+y0(8))/(y0(4)+y0(7));
+        Y0(15)= Y0(12)/Y0(14);
         y0s=vertcat(y0s,Y0);
     end
     
@@ -142,8 +147,9 @@ function [ts,Xms,y0s]= PMMA_DataGeneration(seed)
     plot(Tis,Temps),xlabel('Time(min)'), ylabel('Temprature');
     s='graphs-BTP2/run0.png';
     s(16)=int2str(seed);
-    saveas(gcf,s);
+    %saveas(gcf,s);
 
+     
 
     %% function handle for Dae simulation in Ode15s %
     function Dae2= MMADae2(t,x)
