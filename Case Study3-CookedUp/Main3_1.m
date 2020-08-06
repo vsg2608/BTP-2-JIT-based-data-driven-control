@@ -1,6 +1,6 @@
 %Similarity measurement and system identification
 %With TWED
-function[Y_predicts]= Main3_1(var,P_Time)
+function[Y_predicts, err]= Main3_1(var,P_Time sProfile)
 load ("./data/batch_norm_data.mat");
 
 % rng(seed)

@@ -1,13 +1,13 @@
 %Similarity measurement and system identification
 %Moving Window Method in this file
-function[Y_predicts,Y_actuals,T_predicts]= Main1(var,P_Time)
+function[Y_predicts,Y_actuals,T_predicts, err]= Main1(var,P_Time, sProfile)
 load ("./data/batch_norm_data.mat");
 
 
 Ts=dT;                          %Step time
 qBatch= 5;                      %Query Batch
 qTime= 101;                     %Query Time
-size_Profile=15;                %Query Profile size
+size_Profile=sProfile;                %Query Profile size
 prediction_time= P_Time;                 %Time after qPoint to be predicted
     
 T_predicts=[];

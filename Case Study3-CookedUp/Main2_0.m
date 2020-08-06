@@ -1,5 +1,5 @@
 %Similarity measurement and system identification
-function[Y_predicts]= Main2_0(var,P_Time)
+function[Y_predicts, err]= Main2_0(var,P_Time, sProfile)
 load ("./data/batch_norm_data.mat");
 % Data(100,:,1)=[0.8000, 0.2000, 0.400, 0.8000];
 % Data(130,:,4)=[0.8000, 0.2000, 0.400, 0.8000];
@@ -19,7 +19,7 @@ load ("./data/batch_norm_data.mat");
 
 qBatch= 5;                      %Query Batch
 qTime= 101;                      %Query Time
-size_Profile=15;                %Query Profile sizeT_predicts=[];
+size_Profile=sProfile;                %Query Profile sizeT_predicts=[];
 Y_predicts=[];
 Y_actuals=[];
 Ts= dT;
